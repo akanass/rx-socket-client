@@ -37,7 +37,7 @@ Reconnectable websocket client, [RxJS](http://reactivex.io/rxjs) compliant, wrot
 ## Installation
 
 ```sh
-$ npm install @akanass/rx-http-request
+$ npm install @akanass/rx-socket-client
 ```
 
 [Back to top](#table-of-contents)
