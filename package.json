@@ -1,0 +1,76 @@
+{
+    "name": "@akanass/rx-socket-client",
+    "version": "1.0.0",
+    "description": "Reconnectable websocket client with RxJS Subject",
+    "main": "index.js",
+    "types": "index.d.ts",
+    "private": false,
+    "scripts": {
+        "pretest": "make pretest",
+        "test": "make test",
+        "coveralls": "make coveralls",
+        "clean": "make clean",
+        "tsc": "make tsc",
+        "packaging": "make packaging",
+        "browserify": "make browserify",
+        "prebuild": "make test && make clean",
+        "build": "make tsc",
+        "postbuild": "make packaging && make browserify"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com:njl07/rx-socket-client.git"
+    },
+    "keywords": [
+        "RxJS",
+        "Rx",
+        "ReactiveX",
+        "Observable",
+        "Observer",
+        "Socket",
+        "WebSocket",
+        "Streams",
+        "Async",
+        "ES2015",
+        "ES2016",
+        "ES2017",
+        "ES6",
+        "ES7",
+        "ES8",
+        "Typescript",
+        "Browser"
+    ],
+    "contributors": [
+        {
+            "name": "Nicolas Jessel",
+            "url": "https://github.com/njl07"
+        }
+    ],
+    "license": "SEE LICENSE IN https://github.com/njl07/rx-socket-client/blob/master/LICENSE.md",
+    "bugs": {
+        "url": "https://github.com/njl07/rx-socket-client/issues"
+    },
+    "homepage": "https://github.com/njl07/rx-socket-client#readme",
+    "dependencies": {
+        "rxjs": "^5.2.0"
+    },
+    "devDependencies": {
+        "@types/fs-extra": "^2.0.0",
+        "@types/node": "^7.0.10",
+        "browserify": "^14.1.0",
+        "coveralls": "^2.12.0",
+        "exorcist": "^0.4.0",
+        "fs-extra": "^2.1.2",
+        "istanbul": "^1.1.0-alpha.1",
+        "mocha": "^3.2.0",
+        "mocha-typescript": "^1.0.23",
+        "rimraf": "^2.6.1",
+        "ts-node": "^3.0.2",
+        "tslint": "^4.4.2",
+        "typescript": "^2.2.1",
+        "unit.js": "^2.0.0"
+    },
+    "engines": {
+        "node": ">=7.0.0"
+    }
+}
