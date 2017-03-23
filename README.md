@@ -1,5 +1,7 @@
-<div style="margin-bottom:20px;">
-<div style="line-height:60px">
+# Rx-Socket-Client
+
+<div style="overflow:hidden;margin-bottom:20px;">
+<div style="float:left;line-height:60px">
     <a href="https://travis-ci.org/njl07/rx-socket-client.svg?branch=next">
         <img src="https://travis-ci.org/njl07/rx-socket-client.svg?branch=next" alt="build" />
     </a>
@@ -13,7 +15,7 @@
         <img src="https://david-dm.org/njl07/rx-socket-client/dev-status.svg" alt="devDependencies" />
     </a>
 </div>
-<div>
+<div style="float:right;">
     <a href="https://www.typescriptlang.org/docs/tutorial.html">
         <img src="https://cdn-images-1.medium.com/max/800/1*8lKzkDJVWuVbqumysxMRYw.png"
              align="right" alt="Typescript logo" width="50" height="50" style="border:none;" />
@@ -24,8 +26,6 @@
     </a>
 </div>
 </div>
-
-# Rx-Socket-Client
 
 Reconnectable websocket client, [RxJS](http://reactivex.io/rxjs) compliant, wrote in full [Typescript](https://www.typescriptlang.org/docs/tutorial.html) | [ES6](https://babeljs.io/docs/learn-es2015/) for client and browser side.
 
