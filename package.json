@@ -2,20 +2,21 @@
     "name": "@akanass/rx-socket-client",
     "version": "1.0.0",
     "description": "Reconnectable websocket client with RxJS Subject",
-    "main": "index.js",
-    "browser": "browser.js",
+    "main": "commonjs/index.js",
+    "module": "esm5/index.js",
+    "es2015": "esm2015/index.js",
     "types": "index.d.ts",
     "private": false,
     "scripts": {
         "pretest": "make pretest",
-        "test": "echo \"no test\"",
+        "test": "make test",
         "coveralls": "make coveralls",
         "clean": "make clean",
         "tsc": "make tsc",
         "packaging": "make packaging",
         "browserify": "make browserify",
-        "prebuild": "echo \"no test\" && make clean",
-        "build": "make tsc",
+        "prebuild": "make test && make clean",
+        "build": "make commonjs && make esm2015 && make esm5",
         "postbuild": "make packaging && make browserify"
     },
     "repository": {
@@ -28,6 +29,7 @@
         "ReactiveX",
         "Observable",
         "Observer",
+        "Subject",
         "Socket",
         "WebSocket",
         "Streams",
@@ -53,23 +55,29 @@
     },
     "homepage": "https://github.com/njl07/rx-socket-client#readme",
     "dependencies": {
-        "rxjs": "^5.4.1"
+        "@types/node": "^10.0.8",
+        "websocket": "^1.0.26"
     },
     "devDependencies": {
-        "@types/fs-extra": "^3.0.3",
-        "@types/node": "^8.0.1",
-        "browserify": "^14.4.0",
-        "coveralls": "^2.13.1",
-        "exorcist": "^0.4.0",
-        "fs-extra": "^3.0.1",
+        "@hapiness/core": "^1.5.2",
+        "@types/fs-extra": "^5.0.2",
+        "browserify": "^16.2.2",
+        "coveralls": "^3.0.1",
+        "exorcist": "^1.0.1",
+        "fs-extra": "^6.0.1",
         "istanbul": "^1.1.0-alpha.1",
-        "mocha": "^3.4.2",
-        "mocha-typescript": "^1.1.5",
-        "rimraf": "^2.6.1",
-        "ts-node": "^3.0.6",
-        "tslint": "^5.4.3",
-        "typescript": "^2.3.4",
+        "mocha": "^5.1.1",
+        "mocha-typescript": "^1.1.12",
+        "rimraf": "^2.6.2",
+        "rxjs": "^6.1.0",
+        "rxjs-compat": "^6.1.0",
+        "ts-node": "^6.0.3",
+        "tslint": "^5.10.0",
+        "typescript": "^2.8.3",
         "unit.js": "^2.0.0"
+    },
+    "peerDependencies": {
+        "rxjs": "^6.1.0"
     },
     "engines": {
         "node": ">=7.0.0"

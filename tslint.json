@@ -24,7 +24,7 @@
       "variables-before-functions"
     ],
     "no-arg": true,
-    "no-bitwise": true,
+    "no-bitwise": false,
     "no-console": [
       true,
       "debug",
@@ -39,7 +39,7 @@
     "no-empty": false,
     "no-eval": true,
     "no-inferrable-types": [true, "ignore-params"],
-    "no-shadowed-variable": true,
+    "no-shadowed-variable": false,
     "no-string-literal": false,
     "no-switch-case-fall-through": true,
     "no-trailing-whitespace": true,
@@ -58,7 +58,7 @@
       true,
       "single"
     ],
-    "radix": true,
+    "radix": false,
     "semicolon": [
       "always"
     ],
