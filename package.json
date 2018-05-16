@@ -55,7 +55,7 @@
     },
     "homepage": "https://github.com/njl07/rx-socket-client#readme",
     "dependencies": {
-        "@types/node": "^10.0.8",
+        "@types/node": "^10.1.0",
         "websocket": "^1.0.26"
     },
     "devDependencies": {
