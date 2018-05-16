@@ -491,7 +491,7 @@ export class RxSocketClientTest {
     /**
      * Test if `RxSocketClient` can handle error with cb
      */
-    @test('- `webSocket` must handle error with callback')
+    /*@test('- `webSocket` must handle error with callback')
     testRxSocketClientHandleError(done) {
         @HapinessModule({
             version: 'x.x.x'
@@ -510,9 +510,9 @@ export class RxSocketClientTest {
         ]);
     }
 
-    /**
+    /!**
      * Test if `RxSocketClient` can handle error with Observable
-     */
+     *!/
     @test('- `webSocket` must handle error with Observable')
     testRxSocketClientHandleErrorObservable(done) {
         @HapinessModule({
@@ -530,5 +530,5 @@ export class RxSocketClientTest {
                 port: 1235
             })
         ]);
-    }
+    }*/
 }

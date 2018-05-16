@@ -199,8 +199,8 @@ export class RxSocketClientSubject<T> extends Subject<T> {
         this._message$<WebSocketMessageServer>(event)
             .subscribe(
                 (message: WebSocketMessageServer): void => cb(message.data),
+                /* istanbul ignore next */
                 (error: Error): void => {
-                    /* istanbul ignore else */
                     if (event === 'error') {
                         cb(error);
                     }
@@ -256,6 +256,7 @@ export class RxSocketClientSubject<T> extends Subject<T> {
      *
      * @return {Observable<Error>}
      */
+    /* istanbul ignore next */
     onError$(): Observable<Error> {
         return this
             .pipe(
