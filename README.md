@@ -41,8 +41,8 @@ This library is an **enhancement** of [RxJS WebSocketSubject](https://github.com
     * [webSocket(urlConfigOrSource)](#websocketurlconfigorsource)
     * [.connectionStatus$](#connectionstatus$)
     * [.send(data)](#senddata)
-    * [.emit(event, data)](#emiteventdata)
-    * [.on(event, cb(data))](#oneventcbdata)
+    * [.emit(event, data)](#emitevent-data)
+    * [.on(event, cb(data))](#onevent-cbdata)
     * [.on$(event)](#onevent)
     * [.onBytes(cb(data))](#onbytescbdata)
     * [.onBytes$()](#onbytes)
@@ -232,7 +232,7 @@ socket$.on('close', () => console.log('Socket closed')); // will display message
 
 ### `.on$(event)`
 
-This method is the same as [`.on`](#oneventcbdata) but with `Observable` result.
+This method is the same as [`.on`](#onevent-cbdata) but with `Observable` result.
 
 **Parameter:**
 > ***{string} event*** *(required): event represents value inside `{utf8Data.event}` or `{event}` from server response.*
