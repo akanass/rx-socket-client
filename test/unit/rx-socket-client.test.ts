@@ -54,12 +54,10 @@ export class RxSocketClientTest {
         unit.object(webSocket({
             url: 'ws://0.0.0.0:1235',
             protocol: 'echo-protocol',
-            deserializer: (e: MessageEvent) => null,
             WebSocketCtor: this._wsCtorMock,
             binaryType: 'arraybuffer',
             reconnectInterval: 5000,
-            reconnectAttempts: 10,
-            serializer: (data: any) => null
+            reconnectAttempts: 10
         })).isInstanceOf(RxSocketClientSubject);
     }
 }

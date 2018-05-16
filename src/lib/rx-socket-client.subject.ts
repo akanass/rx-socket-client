@@ -1,7 +1,7 @@
-import { Observable, Subject, Subscription, interval } from 'rxjs';
+import { Observable, Subject, Subscription, interval, of } from 'rxjs';
 import { WebSocketSubject, WebSocketSubjectConfig } from 'rxjs/webSocket';
 import { root } from 'rxjs/internal/util/root';
-import { distinctUntilChanged, takeWhile, map, filter } from 'rxjs/internal/operators';
+import { distinctUntilChanged, catchError, takeWhile, map, filter } from 'rxjs/operators';
 
 import * as ws from 'websocket';
 
@@ -10,14 +10,13 @@ import { Buffer } from 'buffer';
 /**
  * Extends default config to add reconnection data and serializer
  */
-export interface RxSocketClientConfig<T> {
+export interface RxSocketClientConfig {
     /** The url of the socket server to connect to */
     url: string;
     /** The protocol to use to connect */
     protocol?: string | Array<string>;
     /**
-     * A WebSocket constructor to use. This is useful for situations like using a
-     * WebSocket impl in Node (WebSocket is a DOM API), or for mocking a WebSocket
+     * A WebSocket constructor to use. This is useful for mocking a WebSocket
      * for testing purposes
      */
     WebSocketCtor?: { new(url: string, protocol?: string | Array<string>): WebSocket };
@@ -27,20 +26,19 @@ export interface RxSocketClientConfig<T> {
     reconnectInterval?: number;
     /** Sets the reconnection attempts value. */
     reconnectAttempts?: number;
-    /**
-     * A serializer used to create messages from passed values before the
-     * messages are sent to the server.
-     */
-    serializer?: (value: T) => WebSocketMessage;
-    /**
-     * A deserializer used for messages arriving on the over the socket from the
-     * server.
-     */
-    deserializer?: (e: MessageEvent) => T;
 }
 
 /** Type of message sent to server */
-export type WebSocketMessage = string | ArrayBuffer | Blob | ArrayBufferView;
+export type WebSocketMessage = string | Buffer | ArrayBuffer | Blob | ArrayBufferView;
+
+/** Type of message received from server */
+export type WebSocketMessageServer = {
+    event: string;
+    data: string;
+}
+
+/** Type of binary received from server */
+export type WebSocketBinaryServer = Buffer | ArrayBuffer | Blob | ArrayBufferView;
 
 /**
  * Class definition
@@ -54,10 +52,6 @@ export class RxSocketClientSubject<T> extends Subject<T> {
     private _socket: WebSocketSubject<any>;
     // Subject for connection status stream
     private _connectionStatus$: Subject<boolean>;
-    // Deserializer
-    private _deserializer: (e: MessageEvent) => T;
-    // Serializer
-    private _serializer: (value: T) => WebSocketMessage;
     // Socket Subscription
     private _socketSubscription: Subscription;
     // Reconnection Subscription
@@ -72,36 +66,22 @@ export class RxSocketClientSubject<T> extends Subject<T> {
      *
      * @param urlConfigOrSource
      */
-    constructor(urlConfigOrSource: string | RxSocketClientConfig<T>) {
+    constructor(urlConfigOrSource: string | RxSocketClientConfig) {
         super();
 
         // define connection status subject
         this._connectionStatus$ = new Subject<boolean>();
 
-        // set deserializer
-        if ((<RxSocketClientConfig<T>> urlConfigOrSource).deserializer) {
-            this._deserializer = (<RxSocketClientConfig<T>> urlConfigOrSource).deserializer;
-        } else {
-            this._deserializer = this._defaultDeserializer;
-        }
-
-        // set serializer
-        if ((<RxSocketClientConfig<T>> urlConfigOrSource).serializer) {
-            this._serializer = (<RxSocketClientConfig<T>> urlConfigOrSource).serializer;
-        } else {
-            this._serializer = this._defaultSerializer;
-        }
-
         // set reconnect interval
-        if ((<RxSocketClientConfig<T>> urlConfigOrSource).reconnectInterval) {
-            this._reconnectInterval = (<RxSocketClientConfig<T>> urlConfigOrSource).reconnectInterval;
+        if ((<RxSocketClientConfig> urlConfigOrSource).reconnectInterval) {
+            this._reconnectInterval = (<RxSocketClientConfig> urlConfigOrSource).reconnectInterval;
         } else {
             this._reconnectInterval = 5000;
         }
 
         // set reconnect attempts
-        if ((<RxSocketClientConfig<T>> urlConfigOrSource).reconnectAttempts) {
-            this._reconnectAttempts = (<RxSocketClientConfig<T>> urlConfigOrSource).reconnectAttempts;
+        if ((<RxSocketClientConfig> urlConfigOrSource).reconnectAttempts) {
+            this._reconnectAttempts = (<RxSocketClientConfig> urlConfigOrSource).reconnectAttempts;
         } else {
             this._reconnectAttempts = 10;
         }
@@ -116,22 +96,23 @@ export class RxSocketClientSubject<T> extends Subject<T> {
         }
 
         // add protocol in config
-        if ((<RxSocketClientConfig<T>> urlConfigOrSource).protocol) {
-            Object.assign(this._wsSubjectConfig, { protocol: (<RxSocketClientConfig<T>> urlConfigOrSource).protocol });
+        if ((<RxSocketClientConfig> urlConfigOrSource).protocol) {
+            Object.assign(this._wsSubjectConfig, { protocol: (<RxSocketClientConfig> urlConfigOrSource).protocol });
         }
 
         // node environment
         if (!root.WebSocket) {
-            root['WebSocket'] = ws[ 'w3cwebsocket' ];
+            root[ 'WebSocket' ] = ws[ 'w3cwebsocket' ];
         }
+
         // add WebSocketCtor in config
-        if ((<RxSocketClientConfig<T>> urlConfigOrSource).WebSocketCtor) {
-            Object.assign(this._wsSubjectConfig, { WebSocketCtor: (<RxSocketClientConfig<T>> urlConfigOrSource).WebSocketCtor });
+        if ((<RxSocketClientConfig> urlConfigOrSource).WebSocketCtor) {
+            Object.assign(this._wsSubjectConfig, { WebSocketCtor: (<RxSocketClientConfig> urlConfigOrSource).WebSocketCtor });
         }
 
         // add binaryType in config
-        if ((<RxSocketClientConfig<T>> urlConfigOrSource).binaryType) {
-            Object.assign(this._wsSubjectConfig, { binaryType: (<RxSocketClientConfig<T>> urlConfigOrSource).binaryType });
+        if ((<RxSocketClientConfig> urlConfigOrSource).binaryType) {
+            Object.assign(this._wsSubjectConfig, { binaryType: (<RxSocketClientConfig> urlConfigOrSource).binaryType });
         }
 
         // add default data in config
@@ -155,7 +136,7 @@ export class RxSocketClientSubject<T> extends Subject<T> {
         this._connect();
 
         // connection status subscription
-        this.connectionStatus.subscribe(isConnected => {
+        this.connectionStatus$.subscribe(isConnected => {
             if (!this._reconnectionObservable && typeof(isConnected) === 'boolean' && !isConnected) {
                 this._reconnect();
             }
@@ -167,7 +148,7 @@ export class RxSocketClientSubject<T> extends Subject<T> {
      *
      * @return {Observable<boolean>}
      */
-    get connectionStatus(): Observable<boolean> {
+    get connectionStatus$(): Observable<boolean> {
         return this._connectionStatus$
             .pipe(
                 distinctUntilChanged()
@@ -214,35 +195,27 @@ export class RxSocketClientSubject<T> extends Subject<T> {
      *
      * @param cb is the function executed if event matches the response from the server
      */
-    on(event: string | 'error' | 'complete', cb: (data?: any) => void): void {
-        this
-            .pipe(
-                map((message: any): any =>
-                    (message.type && message.type === 'utf8' && message.utf8Data) ?
-                        message.utf8Data :
-                        message
-                ),
-                filter((message: any): boolean => message.event && message.event !== 'error' && message.event !== 'complete'
-                    && message.event === event && message.data)
-            ).subscribe(
-            (message: any): void => cb(message.data),
-            /* istanbul ignore next */
-            (error: Error): void => {
-                if (event === 'error') {
-                    cb(error);
+    on(event: string | 'error' | 'close', cb: (data?: any) => void): void {
+        this._message$<WebSocketMessageServer>(event)
+            .subscribe(
+                (message: WebSocketMessageServer): void => cb(message.data),
+                (error: Error): void => {
+                    /* istanbul ignore else */
+                    if (event === 'error') {
+                        cb(error);
+                    }
+                },
+                (): void => {
+                    /* istanbul ignore else */
+                    if (event === 'close') {
+                        cb();
+                    }
                 }
-            },
-            /* istanbul ignore next */
-            (): void => {
-                if (event === 'complete') {
-                    cb();
-                }
-            }
-        );
+            );
     }
 
     /**
-     * Function to handle bytes response for given event from server
+     * Function to handle bytes response from server
      *
      * @example <caption>Bytes Message from server</caption>
      *
@@ -255,41 +228,71 @@ export class RxSocketClientSubject<T> extends Subject<T> {
      *
      * const message = <Buffer 74 6f 74 6f>
      *
-     * @param event represents Observable handler type
-     *
-     * @value error | complete | data
-     * @example <caption>Event type</caption>
-     *
-     * if (event === 'error') => handle Observable's error
-     * else if (event === 'complete') => handle Observable's complete
-     * else handle Observable's success
-     *
      * @param cb is the function executed if event matches the response from the server
      */
-    onBytes(event: 'data' | 'error' | 'complete', cb: (data?: any) => void): void {
-        this
+    onBytes(cb: (data: WebSocketBinaryServer) => void): void {
+        this.onBytes$()
+            .subscribe(
+                (message: WebSocketBinaryServer): void => cb(message)
+            );
+    }
+
+    /**
+     * Same as `on` method but with Observable response
+     *
+     * @param event represents value inside {utf8Data.event} or {event} from server response
+     *
+     * @return {Observable<any>}
+     */
+    on$(event: string): Observable<any> {
+        return this._message$<WebSocketMessageServer>(event)
+            .pipe(
+                map(_ => _.data)
+            );
+    }
+
+    /**
+     * Function to handle socket error event from server with Observable
+     *
+     * @return {Observable<Error>}
+     */
+    onError$(): Observable<Error> {
+        return this
+            .pipe(
+                catchError(_ => of(_))
+            );
+    }
+
+    /**
+     * Function to handle socket close event from server with Observable
+     *
+     * @return {Observable<void>}
+     */
+    onClose$(): Observable<void> {
+        return Observable.create(observer => {
+            this.subscribe(undefined, undefined, () => {
+                observer.next();
+                observer.complete();
+            });
+        });
+    }
+
+    /**
+     * Returns formatted binary from server with Observable
+     *
+     * @return {Observable<WebSocketBinaryServer>}
+     *
+     * @private
+     */
+    onBytes$(): Observable<WebSocketBinaryServer> {
+        return this
             .pipe(
                 map((message: any): any =>
                     (message.type && message.type === 'binary' && message.binaryData) ?
                         message.binaryData :
                         message
-                ),
-                filter((): boolean => event === 'data')
-            ).subscribe(
-            (message: any): void => cb(message),
-            /* istanbul ignore next */
-            (error: Error): void => {
-                if (event === 'error') {
-                    cb(error);
-                }
-            },
-            /* istanbul ignore next */
-            (): void => {
-                if (event === 'complete') {
-                    cb();
-                }
-            }
-        );
+                )
+            );
     }
 
     /**
@@ -300,6 +303,33 @@ export class RxSocketClientSubject<T> extends Subject<T> {
      */
     emit(event: string, data: any): void {
         this.send({ event, data });
+    }
+
+    /**
+     * Returns formatted and filtered message from server for given event with Observable
+     *
+     * @param {string | "error" | "close"} event represents value inside {utf8Data.event} or {event} from server response
+     *
+     * @return {Observable<WebSocketMessageServer>}
+     *
+     * @private
+     */
+    private _message$<WebSocketMessageServer>(event: string | 'error' | 'close'): Observable<WebSocketMessageServer> {
+        return this
+            .pipe(
+                map((message: any): any =>
+                    (message.type && message.type === 'utf8' && message.utf8Data) ?
+                        message.utf8Data :
+                        message
+                ),
+                filter((message: any): boolean =>
+                    message.event &&
+                    message.event !== 'error' &&
+                    message.event !== 'close' &&
+                    message.event === event &&
+                    message.data
+                )
+            );
     }
 
     /**
@@ -339,11 +369,13 @@ export class RxSocketClientSubject<T> extends Subject<T> {
             (m: any) => {
                 this.next(m);
             },
-            (error: Event) => {
+            (error: Error) => {
                 /* istanbul ignore if */
                 if (!this._socket) {
                     this._cleanReconnection();
                     this._reconnect();
+                } else {
+                    this.error(error);
                 }
             }
         );
@@ -362,10 +394,9 @@ export class RxSocketClientSubject<T> extends Subject<T> {
 
         this._reconnectionSubscription = this._reconnectionObservable.subscribe(
             () => this._connect(),
-            null,
+            undefined,
             () => {
                 this._cleanReconnection();
-                /* istanbul ignore if */
                 if (!this._socket) {
                     this.complete();
                     this._connectionStatus$.complete();
@@ -382,7 +413,7 @@ export class RxSocketClientSubject<T> extends Subject<T> {
      * @return {any}
      * @private
      */
-    private _defaultDeserializer(e: MessageEvent): T {
+    private _deserializer(e: MessageEvent): T {
         try {
             return JSON.parse(e.data);
         } catch (err) {
@@ -398,7 +429,7 @@ export class RxSocketClientSubject<T> extends Subject<T> {
      * @return {WebSocketMessage}
      * @private
      */
-    private _defaultSerializer(data: any): WebSocketMessage {
+    private _serializer(data: any): WebSocketMessage {
         return typeof(data) === 'string' || Buffer.isBuffer(data) ? data : JSON.stringify(data);
     };
 }

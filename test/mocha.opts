@@ -6,3 +6,4 @@
 --throw-deprecation
 --colors
 --exit
+--timeout 5000

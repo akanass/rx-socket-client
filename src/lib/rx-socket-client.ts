@@ -8,6 +8,6 @@ import { RxSocketClientConfig, RxSocketClientSubject } from './rx-socket-client.
  *
  * @return {RxSocketClientSubject}
  */
-export function rxSocketClient<T>(urlConfigOrSource: string | RxSocketClientConfig<T>): RxSocketClientSubject<T> {
+export function rxSocketClient<T>(urlConfigOrSource: string | RxSocketClientConfig): RxSocketClientSubject<T> {
     return new RxSocketClientSubject<T>(urlConfigOrSource);
 }

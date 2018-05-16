@@ -1,2 +1,4 @@
 export { rxSocketClient as webSocket } from './lib/rx-socket-client';
-export { RxSocketClientSubject, RxSocketClientConfig } from './lib/rx-socket-client.subject';
+export {
+    RxSocketClientSubject, RxSocketClientConfig, WebSocketMessage, WebSocketBinaryServer, WebSocketMessageServer
+} from './lib/rx-socket-client.subject';
