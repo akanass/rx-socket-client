@@ -154,7 +154,7 @@ This method sends **data** to web socket server.
 
 For **binary data**,
 
-```json
+```
 {
   type: 'binary',
   binaryData: `data`
@@ -163,7 +163,7 @@ For **binary data**,
 
 For **others**,
 
-```json
+```
 {
   type: 'utf8',
   utf8Data: `data`
@@ -196,7 +196,7 @@ This method handles **text response** for given **event** from web socket server
 
 **UTF** Text Message,
 
-```json
+```
 {
   type: 'utf8',
   utf8Data: {
@@ -208,7 +208,7 @@ This method handles **text response** for given **event** from web socket server
 
 **Simple** Text Message,
 
-```json
+```
 {
   event: `event`,
   data: `data`
@@ -264,7 +264,7 @@ This method handles **binary response** from web socket server.
 
 **Bytes** Message,
 
-```json
+```
 {
   type: 'binary',
   binaryData: <Buffer 74 6f 74 6f>
