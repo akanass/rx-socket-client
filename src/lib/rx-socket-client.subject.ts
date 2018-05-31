@@ -1,7 +1,7 @@
-import { Observable, Subject, Subscription, interval, of } from 'rxjs';
+import { Observable, Subject, Subscription, interval } from 'rxjs';
 import { WebSocketSubject, WebSocketSubjectConfig } from 'rxjs/webSocket';
 import { root } from 'rxjs/internal/util/root';
-import { distinctUntilChanged, catchError, takeWhile, map, filter } from 'rxjs/operators';
+import { distinctUntilChanged, takeWhile, map, filter } from 'rxjs/operators';
 
 import * as ws from 'websocket';
 
@@ -186,25 +186,19 @@ export class RxSocketClientSubject<T> extends Subject<T> {
      *
      * @param event represents value inside {utf8Data.event} or {event} from server response
      *
-     *  @value error | complete | <any>
+     *  @value complete | <any>
      *  @example <caption>Event type</caption>
      *
-     *  if (event === 'error') => handle Observable's error
-     *  else if (event === 'complete') => handle Observable's complete
+     *  if (event === 'complete') => handle Observable's complete
      *  else handle Observable's success
      *
      * @param cb is the function executed if event matches the response from the server
      */
-    on(event: string | 'error' | 'close', cb: (data?: any) => void): void {
+    on(event: string | 'close', cb: (data?: any) => void): void {
         this._message$<WebSocketMessageServer>(event)
             .subscribe(
                 (message: WebSocketMessageServer): void => cb(message.data),
-                /* istanbul ignore next */
-                (error: Error): void => {
-                    if (event === 'error') {
-                        cb(error);
-                    }
-                },
+                undefined,
                 (): void => {
                     /* istanbul ignore else */
                     if (event === 'close') {
@@ -248,19 +242,6 @@ export class RxSocketClientSubject<T> extends Subject<T> {
         return this._message$<WebSocketMessageServer>(event)
             .pipe(
                 map(_ => _.data)
-            );
-    }
-
-    /**
-     * Function to handle socket error event from server with Observable
-     *
-     * @return {Observable<Error>}
-     */
-    /* istanbul ignore next */
-    onError$(): Observable<Error> {
-        return this
-            .pipe(
-                catchError(_ => of(_))
             );
     }
 
@@ -309,13 +290,13 @@ export class RxSocketClientSubject<T> extends Subject<T> {
     /**
      * Returns formatted and filtered message from server for given event with Observable
      *
-     * @param {string | "error" | "close"} event represents value inside {utf8Data.event} or {event} from server response
+     * @param {string | "close"} event represents value inside {utf8Data.event} or {event} from server response
      *
      * @return {Observable<WebSocketMessageServer>}
      *
      * @private
      */
-    private _message$<WebSocketMessageServer>(event: string | 'error' | 'close'): Observable<WebSocketMessageServer> {
+    private _message$<WebSocketMessageServer>(event: string | 'close'): Observable<WebSocketMessageServer> {
         return this
             .pipe(
                 map((message: any): any =>
@@ -325,7 +306,6 @@ export class RxSocketClientSubject<T> extends Subject<T> {
                 ),
                 filter((message: any): boolean =>
                     message.event &&
-                    message.event !== 'error' &&
                     message.event !== 'close' &&
                     message.event === event &&
                     message.data
@@ -375,8 +355,6 @@ export class RxSocketClientSubject<T> extends Subject<T> {
                 if (!this._socket) {
                     this._cleanReconnection();
                     this._reconnect();
-                } else {
-                    this.error(error);
                 }
             }
         );

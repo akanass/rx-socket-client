@@ -487,48 +487,4 @@ export class RxSocketClientTest {
             })
         ]);
     }
-
-    /**
-     * Test if `RxSocketClient` can handle error with cb
-     */
-    /*@test('- `webSocket` must handle error with callback')
-    testRxSocketClientHandleError(done) {
-        @HapinessModule({
-            version: 'x.x.x'
-        })
-        class SocketServerModule implements OnStart {
-            onStart() {
-                webSocket('ws://0.0.0.0:6666')
-                    .on('error', () => Hapiness.shutdown().subscribe(_ => done()));
-            }
-        }
-
-        Hapiness.bootstrap(SocketServerModule, [
-            SocketServerExt.setConfig({
-                port: 1235
-            })
-        ]);
-    }
-
-    /!**
-     * Test if `RxSocketClient` can handle error with Observable
-     *!/
-    @test('- `webSocket` must handle error with Observable')
-    testRxSocketClientHandleErrorObservable(done) {
-        @HapinessModule({
-            version: 'x.x.x'
-        })
-        class SocketServerModule implements OnStart {
-            onStart() {
-                webSocket('ws://0.0.0.0:6666')
-                    .onError$().subscribe(() => Hapiness.shutdown().subscribe(_ => done()));
-            }
-        }
-
-        Hapiness.bootstrap(SocketServerModule, [
-            SocketServerExt.setConfig({
-                port: 1235
-            })
-        ]);
-    }*/
 }

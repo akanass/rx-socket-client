@@ -116,22 +116,6 @@ export class RxSocketClientSubjectTest {
     }
 
     /**
-     * Test if `RxSocketClientSubject` as an `onError$` function
-     */
-    @test('- `RxSocketClientSubject` must have `onError$` function')
-    testRxSocketClientSubjectOnError$() {
-        unit.function(this._ws.onError$);
-    }
-
-    /**
-     * Test if `RxSocketClientSubject.onError$` function returns an Observable
-     */
-    @test('- `RxSocketClientSubject.onError$` function must return an Observable')
-    testRxSocketClientSubjectOnError$Observable() {
-        unit.object(this._ws.onError$()).isInstanceOf(Observable);
-    }
-
-    /**
      * Test if `RxSocketClientSubject` as an `emit` function
      */
     @test('- `RxSocketClientSubject` must have `emit` function')

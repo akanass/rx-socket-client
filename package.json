@@ -1,6 +1,6 @@
 {
     "name": "@akanass/rx-socket-client",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Reconnectable websocket client with RxJS Subject",
     "main": "commonjs/index.js",
     "module": "esm5/index.js",
@@ -55,7 +55,7 @@
     },
     "homepage": "https://github.com/njl07/rx-socket-client#readme",
     "dependencies": {
-        "@types/node": "^10.1.0",
+        "@types/node": "^10.1.4",
         "websocket": "^1.0.26"
     },
     "devDependencies": {
@@ -69,15 +69,15 @@
         "mocha": "^5.1.1",
         "mocha-typescript": "^1.1.12",
         "rimraf": "^2.6.2",
-        "rxjs": "^6.1.0",
-        "rxjs-compat": "^6.1.0",
+        "rxjs": "^6.2.0",
+        "rxjs-compat": "^6.2.0",
         "ts-node": "^6.0.3",
         "tslint": "^5.10.0",
         "typescript": "^2.8.3",
         "unit.js": "^2.0.0"
     },
     "peerDependencies": {
-        "rxjs": "^6.1.0"
+        "rxjs": "^6.2.0"
     },
     "engines": {
         "node": ">=7.0.0"

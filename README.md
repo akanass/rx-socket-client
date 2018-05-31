@@ -46,7 +46,6 @@ This library is an **enhancement** of [RxJS WebSocketSubject](https://github.com
     * [.on$(event)](#onevent)
     * [.onBytes(cb(data))](#onbytescbdata)
     * [.onBytes$()](#onbytes)
-    * [.onError$()](#onerror)
     * [.onClose$()](#onclose)
 * [RxSocketClientConfig in detail](#rxsocketclientconfig-in-detail)
 * [Contributing](#contributing)
@@ -185,10 +184,8 @@ This method emits **data** for given **event** to web socket server.
 This method handles **text response** for given **event** from web socket server.
 
 **Parameters:**
-> - ***{string | 'error' | 'close'} event*** *(required): event represents value inside `{utf8Data.event}` or `{event}` from server response.*
+> - ***{string | 'close'} event*** *(required): event represents value inside `{utf8Data.event}` or `{event}` from server response.*
 > - ***{function} cb*** *(required): cb is the function executed if event matches the response from the server. `data` in parameter is the **text** data received from the server.*
-
-**Note:** `error` event will be only fired by `Observable` **error** process.
 
 **Note:** `close` event will be only fired by `Observable` **complete** process.
 
@@ -223,9 +220,6 @@ const socket$ = webSocket('ws://127.0.0.1:1235');
 // receive message from server with callback
 socket$.on('event', data => console.log(data)); // will display received data in console if event is fired
 
-// handle error from server with callback
-socket$.on('error', error => console.error(error)); // will display error in console if event is fired
-
 // handle close from server with callback
 socket$.on('close', () => console.log('Socket closed')); // will display message in console if event is fired
 ```
@@ -240,7 +234,7 @@ This method is the same as [`.on`](#onevent-cbdata) but with `Observable` result
 **Result:**
 > *Observable instance*
 
-**Note:** `error` and `close` event are not supported with this method, check after for specific implementation. But, you can just use `error` and `complete` section of each **subscription** to handle them in each event if you want.
+**Note:** `close` event is not supported with this method, check after for specific implementation. But, you can just use `complete` section of each **subscription** to handle them in each event if you want.
 
 For example:
 
@@ -249,8 +243,8 @@ const socket$ = webSocket('ws://127.0.0.1:1235');
 
 socket$.on$('event').subscribe(data => console.log(data)); // will log data from server in console if event is fired
 
-// handle error and close in subscription
-socket$.on$('*').subscribe(undefined, error => console.error(error), () => console.log('Socket closed'));
+// handle close in subscription
+socket$.on$('*').subscribe(undefined, undefined, () => console.log('Socket closed'));
 ```
 
 ### `.onBytes(cb(data))`
@@ -292,7 +286,7 @@ This method is the same as [`.onBytes`](#onbytescbdata) but with `Observable` re
 **Result:**
 > *Observable instance*
 
-**Note:** `error` and `close` event are not supported with this method, check after for specific implementation. But, you can just use `error` and `complete` section of each **subscription** to handle them in each event if you want.
+**Note:** `close` event is not supported with this method, check after for specific implementation. But, you can just use `complete` section of each **subscription** to handle them in each event if you want.
 
 For example:
 
@@ -301,23 +295,8 @@ const socket$ = webSocket('ws://127.0.0.1:1235');
 
 socket$.onBytes$().subscribe(data => console.log(data)); // will log data from server in console if event is fired
 
-// handle error and close in subscription
-socket$.onBytes$().subscribe(undefined, error => console.error(error), () => console.log('Socket closed'));
-```
-
-### `.onError$()`
-
-This method handles `error` from web socket server with `Observable` result and send `error` inside **`next`** process.
-
-**Result:**
-> *Observable instance*
-
-For example:
-
-```typescript
-const socket$ = webSocket('ws://127.0.0.1:1235');
-
-socket$.onError$().subscribe(error => console.error(error)); // will log error from server in console if one occurred
+// handle close in subscription
+socket$.onBytes$().subscribe(undefined, undefined, () => console.log('Socket closed'));
 ```
 
 ### `.onClose$()`
@@ -363,6 +342,11 @@ To set up your development environment:
 
 ## Change History
 
+* v1.1.0 (2018-05-31)
+    * Delete `error` process/methods because never called with reconnection
+    * Update tests
+    * Latest packages' versions
+    * Documentation
 * v1.0.0 (2018-05-16)
     * Carefully written from scratch to make `Rx-Socket-Client` a drop-in replacement for `WebSocketSubject`
 
