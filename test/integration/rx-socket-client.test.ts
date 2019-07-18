@@ -156,6 +156,7 @@ describe('- Integration rx-socket-client.test.ts file', () => {
      * Test if `webSocket` can send Bytes message to server
      */
     test('- `webSocket` must send bytes message to server', (done) => {
+        jest.setTimeout(30000);
         @HapinessModule({
             version: 'x.x.x'
         })
