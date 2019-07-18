@@ -1,11 +1,10 @@
-import { Observable, Subject, Subscription, interval } from 'rxjs';
-import { WebSocketSubject, WebSocketSubjectConfig } from 'rxjs/webSocket';
+import { Buffer } from 'buffer';
+import { interval, Observable, Subject, Subscription } from 'rxjs';
 import { root } from 'rxjs/internal/util/root';
-import { distinctUntilChanged, takeWhile, map, filter } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeWhile } from 'rxjs/operators';
+import { WebSocketSubject, WebSocketSubjectConfig } from 'rxjs/webSocket';
 
 import * as ws from 'websocket';
-
-import { Buffer } from 'buffer';
 
 /**
  * Extends default config to add reconnection data and serializer
@@ -73,15 +72,15 @@ export class RxSocketClientSubject<T> extends Subject<T> {
         this._connectionStatus$ = new Subject<boolean>();
 
         // set reconnect interval
-        if ((<RxSocketClientConfig> urlConfigOrSource).reconnectInterval) {
-            this._reconnectInterval = (<RxSocketClientConfig> urlConfigOrSource).reconnectInterval;
+        if ((urlConfigOrSource as RxSocketClientConfig).reconnectInterval) {
+            this._reconnectInterval = (urlConfigOrSource as RxSocketClientConfig).reconnectInterval;
         } else {
             this._reconnectInterval = 5000;
         }
 
         // set reconnect attempts
-        if ((<RxSocketClientConfig> urlConfigOrSource).reconnectAttempts) {
-            this._reconnectAttempts = (<RxSocketClientConfig> urlConfigOrSource).reconnectAttempts;
+        if ((urlConfigOrSource as RxSocketClientConfig).reconnectAttempts) {
+            this._reconnectAttempts = (urlConfigOrSource as RxSocketClientConfig).reconnectAttempts;
         } else {
             this._reconnectAttempts = 10;
         }
@@ -96,8 +95,8 @@ export class RxSocketClientSubject<T> extends Subject<T> {
         }
 
         // add protocol in config
-        if ((<RxSocketClientConfig> urlConfigOrSource).protocol) {
-            Object.assign(this._wsSubjectConfig, { protocol: (<RxSocketClientConfig> urlConfigOrSource).protocol });
+        if ((urlConfigOrSource as RxSocketClientConfig).protocol) {
+            Object.assign(this._wsSubjectConfig, { protocol: (urlConfigOrSource as RxSocketClientConfig).protocol });
         }
 
         // node environment
@@ -106,13 +105,13 @@ export class RxSocketClientSubject<T> extends Subject<T> {
         }
 
         // add WebSocketCtor in config
-        if ((<RxSocketClientConfig> urlConfigOrSource).WebSocketCtor) {
-            Object.assign(this._wsSubjectConfig, { WebSocketCtor: (<RxSocketClientConfig> urlConfigOrSource).WebSocketCtor });
+        if ((urlConfigOrSource as RxSocketClientConfig).WebSocketCtor) {
+            Object.assign(this._wsSubjectConfig, { WebSocketCtor: (urlConfigOrSource as RxSocketClientConfig).WebSocketCtor });
         }
 
         // add binaryType in config
-        if ((<RxSocketClientConfig> urlConfigOrSource).binaryType) {
-            Object.assign(this._wsSubjectConfig, { binaryType: (<RxSocketClientConfig> urlConfigOrSource).binaryType });
+        if ((urlConfigOrSource as RxSocketClientConfig).binaryType) {
+            Object.assign(this._wsSubjectConfig, { binaryType: (urlConfigOrSource as RxSocketClientConfig).binaryType });
         }
 
         // add default data in config
@@ -120,12 +119,12 @@ export class RxSocketClientSubject<T> extends Subject<T> {
             deserializer: this._deserializer,
             serializer: this._serializer,
             openObserver: {
-                next: (e: Event) => {
+                next: () => {
                     this._connectionStatus$.next(true);
                 }
             },
             closeObserver: {
-                next: (e: CloseEvent) => {
+                next: () => {
                     this._cleanSocket();
                     this._connectionStatus$.next(false);
                 }
@@ -137,7 +136,7 @@ export class RxSocketClientSubject<T> extends Subject<T> {
 
         // connection status subscription
         this.connectionStatus$.subscribe(isConnected => {
-            if (!this._reconnectionObservable && typeof(isConnected) === 'boolean' && !isConnected) {
+            if (!this._reconnectionObservable && typeof (isConnected) === 'boolean' && !isConnected) {
                 this._reconnect();
             }
         });
@@ -198,7 +197,8 @@ export class RxSocketClientSubject<T> extends Subject<T> {
         this._message$<WebSocketMessageServer>(event)
             .subscribe(
                 (message: WebSocketMessageServer): void => cb(message.data),
-                undefined,
+                /* istanbul ignore next */
+                () => undefined,
                 (): void => {
                     /* istanbul ignore else */
                     if (event === 'close') {
@@ -251,11 +251,16 @@ export class RxSocketClientSubject<T> extends Subject<T> {
      * @return {Observable<void>}
      */
     onClose$(): Observable<void> {
-        return Observable.create(observer => {
-            this.subscribe(undefined, undefined, () => {
-                observer.next();
-                observer.complete();
-            });
+        return new Observable(observer => {
+            this.subscribe(
+                /* istanbul ignore next */
+                () => undefined,
+                /* istanbul ignore next */
+                () => undefined,
+                () => {
+                    observer.next();
+                    observer.complete();
+                });
         });
     }
 
@@ -350,7 +355,7 @@ export class RxSocketClientSubject<T> extends Subject<T> {
             (m: any) => {
                 this.next(m);
             },
-            (error: Error) => {
+            () => {
                 /* istanbul ignore if */
                 if (!this._socket) {
                     this._cleanReconnection();
@@ -373,7 +378,8 @@ export class RxSocketClientSubject<T> extends Subject<T> {
 
         this._reconnectionSubscription = this._reconnectionObservable.subscribe(
             () => this._connect(),
-            undefined,
+            /* istanbul ignore next */
+            () => undefined,
             () => {
                 this._cleanReconnection();
                 if (!this._socket) {
@@ -409,6 +415,6 @@ export class RxSocketClientSubject<T> extends Subject<T> {
      * @private
      */
     private _serializer(data: any): WebSocketMessage {
-        return typeof(data) === 'string' || Buffer.isBuffer(data) ? data : JSON.stringify(data);
+        return typeof (data) === 'string' || Buffer.isBuffer(data) ? data : JSON.stringify(data);
     };
 }

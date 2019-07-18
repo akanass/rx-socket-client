@@ -1,9 +1,0 @@
---ui tdd
---report lcovonly
---reporter spec
---recursive
---require ts-node/register
---throw-deprecation
---colors
---exit
---timeout 10000

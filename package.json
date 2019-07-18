@@ -1,6 +1,6 @@
 {
     "name": "@akanass/rx-socket-client",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "description": "Reconnectable websocket client with RxJS Subject",
     "main": "commonjs/index.js",
     "module": "esm5/index.js",
@@ -8,20 +8,19 @@
     "types": "index.d.ts",
     "private": false,
     "scripts": {
-        "pretest": "make pretest",
+        "pretest": "make clean && make pretest",
         "test": "make test",
         "coveralls": "make coveralls",
         "clean": "make clean",
-        "tsc": "make tsc",
         "packaging": "make packaging",
         "browserify": "make browserify",
-        "prebuild": "make test && make clean",
+        "prebuild": "make clean && make pretest && make test",
         "build": "make commonjs && make esm2015 && make esm5",
         "postbuild": "make packaging && make browserify"
     },
     "repository": {
         "type": "git",
-        "url": "git+ssh://git@github.com:njl07/rx-socket-client.git"
+        "url": "git+ssh://git@github.com:akanass/rx-socket-client.git"
     },
     "keywords": [
         "RxJS",
@@ -46,38 +45,37 @@
     "contributors": [
         {
             "name": "Nicolas Jessel",
-            "url": "https://github.com/njl07"
+            "url": "https://github.com/akanass"
         }
     ],
-    "license": "SEE LICENSE IN https://github.com/njl07/rx-socket-client/blob/master/LICENSE.md",
+    "license": "SEE LICENSE IN https://github.com/akanass/rx-socket-client/blob/master/LICENSE.md",
     "bugs": {
-        "url": "https://github.com/njl07/rx-socket-client/issues"
+        "url": "https://github.com/akanass/rx-socket-client/issues"
     },
-    "homepage": "https://github.com/njl07/rx-socket-client#readme",
+    "homepage": "https://github.com/akanass/rx-socket-client#readme",
     "dependencies": {
-        "@types/node": "^10.1.4",
-        "websocket": "^1.0.26"
+        "@types/node": "^12.6.8",
+        "websocket": "^1.0.29"
     },
     "devDependencies": {
-        "@hapiness/core": "^1.5.2",
-        "@types/fs-extra": "^5.0.2",
-        "browserify": "^16.2.2",
-        "coveralls": "^3.0.1",
+        "@hapiness/core": "^1.6.0",
+        "@types/fs-extra": "^8.0.0",
+        "@types/jest": "^24.0.15",
+        "browserify": "^16.3.0",
+        "coveralls": "^3.0.5",
         "exorcist": "^1.0.1",
-        "fs-extra": "^6.0.1",
-        "istanbul": "^1.1.0-alpha.1",
-        "mocha": "^5.1.1",
-        "mocha-typescript": "^1.1.12",
-        "rimraf": "^2.6.2",
-        "rxjs": "^6.2.0",
-        "rxjs-compat": "^6.2.0",
-        "ts-node": "^6.0.3",
-        "tslint": "^5.10.0",
-        "typescript": "^2.8.3",
-        "unit.js": "^2.0.0"
+        "fs-extra": "^8.1.0",
+        "jest": "^24.8.0",
+        "rimraf": "^2.6.3",
+        "rxjs": "^6.5.2",
+        "rxjs-compat": "^6.5.2",
+        "ts-jest": "^24.0.2",
+        "ts-node": "^8.3.0",
+        "tslint": "^5.18.0",
+        "typescript": "^3.5.3"
     },
     "peerDependencies": {
-        "rxjs": "^6.2.0"
+        "rxjs": "^6.5.2"
     },
     "engines": {
         "node": ">=7.0.0"

@@ -2,17 +2,17 @@
 
 <div style="overflow:hidden;margin-bottom:20px;">
 <div style="float:left;line-height:60px">
-    <a href="https://travis-ci.org/njl07/rx-socket-client.svg?branch=master">
-        <img src="https://travis-ci.org/njl07/rx-socket-client.svg?branch=master" alt="build" />
+    <a href="https://travis-ci.org/akanass/rx-socket-client.svg?branch=master">
+        <img src="https://travis-ci.org/akanass/rx-socket-client.svg?branch=master" alt="build" />
     </a>
-    <a href="https://coveralls.io/github/njl07/rx-socket-client?branch=master">
-        <img src="https://coveralls.io/repos/github/njl07/rx-socket-client/badge.svg?branch=master" alt="coveralls" />
+    <a href="https://coveralls.io/github/akanass/rx-socket-client?branch=master">
+        <img src="https://coveralls.io/repos/github/akanass/rx-socket-client/badge.svg?branch=master" alt="coveralls" />
     </a>
-    <a href="https://david-dm.org/njl07/rx-socket-client">
-        <img src="https://david-dm.org/njl07/rx-socket-client.svg" alt="dependencies" />
+    <a href="https://david-dm.org/akanass/rx-socket-client">
+        <img src="https://david-dm.org/akanass/rx-socket-client.svg" alt="dependencies" />
     </a>
-    <a href="https://david-dm.org/njl07/rx-socket-client?type=dev">
-        <img src="https://david-dm.org/njl07/rx-socket-client/dev-status.svg" alt="devDependencies" />
+    <a href="https://david-dm.org/akanass/rx-socket-client?type=dev">
+        <img src="https://david-dm.org/akanass/rx-socket-client/dev-status.svg" alt="devDependencies" />
     </a>
 </div>
 <div style="float:right;">
@@ -342,6 +342,10 @@ To set up your development environment:
 
 ## Change History
 
+* v1.2.0 (2019-07-18)
+    * Upgrade all packages' versions
+    * Migrate tests to [jest](https://jestjs.io/en/) and [ts-jest](https://kulshekhar.github.io/ts-jest/)
+    * Documentation
 * v1.1.0 (2018-05-31)
     * Delete `error` process/methods because never called with reconnection
     * Update tests
@@ -352,6 +356,6 @@ To set up your development environment:
 
 ## License
 
-Copyright (c) 2018 **Nicolas Jessel** Licensed under the [MIT license](https://github.com/njl07/rx-socket-client/tree/master/LICENSE.md).
+Copyright (c) 2018 **Nicolas Jessel** Licensed under the [MIT license](https://github.com/akanass/rx-socket-client/tree/master/LICENSE.md).
 
 [Back to top](#table-of-contents)
