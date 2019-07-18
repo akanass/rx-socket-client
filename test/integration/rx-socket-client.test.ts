@@ -7,6 +7,7 @@ import { webSocket } from '../../src';
 
 describe('- Integration rx-socket-client.test.ts file', () => {
     beforeEach(() => jest.setTimeout(300000));
+    afterAll(() => setTimeout(() => process.exit(), 1000));
     /**
      * Test if `webSocket` can connect to server and status is connected
      */
