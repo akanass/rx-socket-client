@@ -1,7 +1,7 @@
 pretest:
 	@node ./node_modules/.bin/tslint -p ./tsconfig.json "./src/**/*.ts" "./test/**/*.ts"
 test:
-	@node node_modules/.bin/jest
+	@node node_modules/.bin/jest --detectOpenHandles
 coveralls:
 	cat ./coverage/lcov.info | node ./node_modules/.bin/coveralls
 commonjs:
