@@ -6,7 +6,7 @@ import { elementAt, first } from 'rxjs/operators';
 import { webSocket } from '../../src';
 
 describe('- Integration rx-socket-client.test.ts file', () => {
-    beforeEach(() => jest.setTimeout(30000));
+    beforeEach(() => jest.setTimeout(300000));
     /**
      * Test if `webSocket` can connect to server and status is connected
      */
