@@ -6,6 +6,7 @@ import { elementAt, first } from 'rxjs/operators';
 import { webSocket } from '../../src';
 
 describe('- Integration rx-socket-client.test.ts file', () => {
+    beforeEach(() => jest.setTimeout(30000));
     /**
      * Test if `webSocket` can connect to server and status is connected
      */
@@ -156,7 +157,6 @@ describe('- Integration rx-socket-client.test.ts file', () => {
      * Test if `webSocket` can send Bytes message to server
      */
     test('- `webSocket` must send bytes message to server', (done) => {
-        jest.setTimeout(30000);
         @HapinessModule({
             version: 'x.x.x'
         })
