@@ -299,6 +299,7 @@ To set up your development environment:
 * v2.0.0 (2021-09-15)
     * Upgrade all packages' versions to move on `rxjs:7.3.0` and delete incompatible packages
     * Delete browser single version due to incompatibility
+    * Delete `es5` version and now module is only on `es2015` and if you want an older support, your bundle system should transpile it to `es5`
     * Documentation
 * v1.2.0 (2019-07-18)
     * Upgrade all packages' versions
