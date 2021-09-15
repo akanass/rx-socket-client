@@ -1,32 +1,5 @@
 # Rx-Socket-Client
 
-<div style="overflow:hidden;margin-bottom:20px;">
-<div style="float:left;line-height:60px">
-    <a href="https://travis-ci.org/akanass/rx-socket-client.svg?branch=master">
-        <img src="https://travis-ci.org/akanass/rx-socket-client.svg?branch=master" alt="build" />
-    </a>
-    <a href="https://coveralls.io/github/akanass/rx-socket-client?branch=master">
-        <img src="https://coveralls.io/repos/github/akanass/rx-socket-client/badge.svg?branch=master" alt="coveralls" />
-    </a>
-    <a href="https://david-dm.org/akanass/rx-socket-client">
-        <img src="https://david-dm.org/akanass/rx-socket-client.svg" alt="dependencies" />
-    </a>
-    <a href="https://david-dm.org/akanass/rx-socket-client?type=dev">
-        <img src="https://david-dm.org/akanass/rx-socket-client/dev-status.svg" alt="devDependencies" />
-    </a>
-</div>
-<div style="float:right;">
-    <a href="https://www.typescriptlang.org/docs/tutorial.html">
-        <img src="https://cdn-images-1.medium.com/max/800/1*8lKzkDJVWuVbqumysxMRYw.png"
-             align="right" alt="Typescript logo" width="50" height="50" style="border:none;" />
-    </a>
-    <a href="http://reactivex.io/rxjs">
-        <img src="http://reactivex.io/assets/Rx_Logo_S.png"
-             align="right" alt="ReactiveX logo" width="50" height="50" style="border:none;" />
-    </a>
-</div>
-</div>
-
 Reconnectable websocket client, [RxJS](http://reactivex.io/rxjs) compliant, wrote in full [Typescript](https://www.typescriptlang.org/docs/tutorial.html) | [ES6](https://babeljs.io/docs/learn-es2015/) for client and browser side.
 
 This library is an **enhancement** of [RxJS WebSocketSubject](https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/dom/WebSocketSubject.ts) to add more features and the native support of **Node.js** environment.
@@ -36,7 +9,6 @@ This library is an **enhancement** of [RxJS WebSocketSubject](https://github.com
 
 * [Installation](#installation)
 * [Super simple to use](#super-simple-to-use)
-* [Browser compatibility](#browser-compatibility)
 * [API in Detail](#api-in-detail)
     * [webSocket(urlConfigOrSource)](#websocketurlconfigorsource)
     * [.connectionStatus$](#connectionstatus$)
@@ -95,24 +67,6 @@ socket$.on('event', data => console.log(data)); // will display received data in
 // receive message from server with Observable
 socket$.on$('event').subscribe(data => console.log(data)); // will display received data in console if event is fired
 ```
-
-## Browser compatibility
-
-**Rx-Socket-Client** can be used in your favorite browser to have all features in your own front application.
-
-Just import `browser/index.js` script and enjoy:
-
-```javascript
-<script src="node_modules/@akanass/rx-socket-client/browser/index.js" type="application/javascript"></script>
-<script type="application/javascript">
-    const socket$ = rsc.webSocket('ws://127.0.0.1:1235');
-
-    // send message
-    socket$.send('my message from socket');
-</script>
-```
-
-Browser version is a **standalone** version so you just need to `copy/paste` file from `node_modules/@akanass/rx-socket-client/browser/index.js` when you want to create your bundle and change path to it.
 
 [Back to top](#table-of-contents)
 
@@ -342,6 +296,10 @@ To set up your development environment:
 
 ## Change History
 
+* v2.0.0 (2021-09-15)
+    * Upgrade all packages' versions to move on `rxjs:7.3.0` and delete incompatible packages
+    * Delete browser single version due to incompatibility
+    * Documentation
 * v1.2.0 (2019-07-18)
     * Upgrade all packages' versions
     * Migrate tests to [jest](https://jestjs.io/en/) and [ts-jest](https://kulshekhar.github.io/ts-jest/)

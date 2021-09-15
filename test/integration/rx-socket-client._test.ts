@@ -1,3 +1,4 @@
+/*
 import { Hapiness, HapinessModule, Inject, OnStart, Socket, SocketServerExt, WebSocketServer } from '@hapiness/core';
 import { Buffer } from 'buffer';
 import 'rxjs-compat';
@@ -5,12 +6,12 @@ import { elementAt, first } from 'rxjs/operators';
 
 import { webSocket } from '../../src';
 
-describe('- Integration rx-socket-client.test.ts file', () => {
+describe('- Integration rx-socket-client._test.ts file', () => {
     beforeEach(() => jest.setTimeout(300000));
     afterAll(() => setTimeout(() => process.exit(), 1000));
-    /**
+    /!**
      * Test if `webSocket` can connect to server and status is connected
-     */
+     *!/
     test('- `webSocket` must connect to server and status is connected', (done) => {
         @HapinessModule({
             version: 'x.x.x'
@@ -41,9 +42,9 @@ describe('- Integration rx-socket-client.test.ts file', () => {
         ]);
     });
 
-    /**
+    /!**
      * Test if `webSocket` can reconnect to server by itself
-     */
+     *!/
     test('- `webSocket` must reconnect to server by itself', (done) => {
         @HapinessModule({
             version: 'x.x.x'
@@ -91,9 +92,9 @@ describe('- Integration rx-socket-client.test.ts file', () => {
         ]);
     });
 
-    /**
+    /!**
      * Test if `webSocket` can emit UTF data for given event to server
-     */
+     *!/
     test('- `webSocket` must emit data for given event to server', (done) => {
         @HapinessModule({
             version: 'x.x.x'
@@ -121,9 +122,9 @@ describe('- Integration rx-socket-client.test.ts file', () => {
         ]);
     });
 
-    /**
+    /!**
      * Test if `webSocket` can send UTF message to server
-     */
+     *!/
     test('- `webSocket` must send UTF message to server', (done) => {
         @HapinessModule({
             version: 'x.x.x'
@@ -154,9 +155,9 @@ describe('- Integration rx-socket-client.test.ts file', () => {
         ]);
     });
 
-    /**
+    /!**
      * Test if `webSocket` can send Bytes message to server
-     */
+     *!/
     test('- `webSocket` must send bytes message to server', (done) => {
         @HapinessModule({
             version: 'x.x.x'
@@ -185,9 +186,9 @@ describe('- Integration rx-socket-client.test.ts file', () => {
         ]);
     });
 
-    /**
+    /!**
      * Test if `webSocket` can receive UTF data for given event emit by server
-     */
+     *!/
     test('- `webSocket` must receive UTF data for given event emit by server', (done) => {
         @HapinessModule({
             version: 'x.x.x'
@@ -213,9 +214,9 @@ describe('- Integration rx-socket-client.test.ts file', () => {
         ]);
     });
 
-    /**
+    /!**
      * Test if `webSocket` can receive UTF data for given event emit by server with Observable
-     */
+     *!/
     test('- `webSocket` must receive UTF data for given event emit by server with Observable', (done) => {
         @HapinessModule({
             version: 'x.x.x'
@@ -241,9 +242,9 @@ describe('- Integration rx-socket-client.test.ts file', () => {
         ]);
     });
 
-    /**
+    /!**
      * Test if `webSocket` can receive UTF message for given event from server
-     */
+     *!/
     test('- `webSocket` must receive UTF message for given event send by server', (done) => {
         @HapinessModule({
             version: 'x.x.x'
@@ -272,9 +273,9 @@ describe('- Integration rx-socket-client.test.ts file', () => {
         ]);
     });
 
-    /**
+    /!**
      * Test if `webSocket` can receive UTF message for given event from server with Observable
-     */
+     *!/
     test('- `webSocket` must receive UTF message for given event send by server with Observable', (done) => {
         @HapinessModule({
             version: 'x.x.x'
@@ -303,9 +304,9 @@ describe('- Integration rx-socket-client.test.ts file', () => {
         ]);
     });
 
-    /**
+    /!**
      * Test if `webSocket` can receive Bytes data emitted by server
-     */
+     *!/
     test('- `webSocket` must receive Bytes data emitted by server', (done) => {
         @HapinessModule({
             version: 'x.x.x'
@@ -331,9 +332,9 @@ describe('- Integration rx-socket-client.test.ts file', () => {
         ]);
     });
 
-    /**
+    /!**
      * Test if `webSocket` can receive Bytes data emitted by server with Observable
-     */
+     *!/
     test('- `webSocket` must receive Bytes data emitted by server with Observable', (done) => {
         @HapinessModule({
             version: 'x.x.x'
@@ -360,9 +361,9 @@ describe('- Integration rx-socket-client.test.ts file', () => {
         ]);
     });
 
-    /**
+    /!**
      * Test if `RxSocketClient` can receive Bytes message sent by server
-     */
+     *!/
     test('- `webSocket` must receive Bytes message sent by server', (done) => {
         @HapinessModule({
             version: 'x.x.x'
@@ -391,9 +392,9 @@ describe('- Integration rx-socket-client.test.ts file', () => {
         ]);
     });
 
-    /**
+    /!**
      * Test if `RxSocketClient` can receive UTF message for given event send by server with Observable
-     */
+     *!/
     test('- `webSocket` must receive Bytes message for given event send by server with Observable', (done) => {
         @HapinessModule({
             version: 'x.x.x'
@@ -423,9 +424,9 @@ describe('- Integration rx-socket-client.test.ts file', () => {
         ]);
     });
 
-    /**
+    /!**
      * Test if `RxSocketClient` can handle close with Observable
-     */
+     *!/
     test('- `webSocket` must handle close with Observable', (done) => {
         @HapinessModule({
             version: 'x.x.x'
@@ -448,9 +449,9 @@ describe('- Integration rx-socket-client.test.ts file', () => {
         ]);
     });
 
-    /**
+    /!**
      * Test if `RxSocketClient` can handle close with cb
-     */
+     *!/
     test('- `webSocket` must handle close with callback', (done) => {
         @HapinessModule({
             version: 'x.x.x'
@@ -473,3 +474,4 @@ describe('- Integration rx-socket-client.test.ts file', () => {
         ]);
     });
 });
+*/

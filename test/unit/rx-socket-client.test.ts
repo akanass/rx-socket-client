@@ -3,7 +3,7 @@ import { RxSocketClientSubject, webSocket } from '../../src';
 
 let w3cwebsocketStub: any;
 
-describe('- Unit rx-socket-client.test.ts file', () => {
+describe('- Unit rx-socket-client._test.ts file', () => {
     /**
      * Before each test
      */
