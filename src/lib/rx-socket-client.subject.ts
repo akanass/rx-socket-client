@@ -33,7 +33,7 @@ export type WebSocketMessage = string | Buffer | ArrayBuffer | Blob | ArrayBuffe
 export type WebSocketMessageServer = {
   event: string;
   data: string;
-}
+};
 
 /** Type of binary received from server */
 export type WebSocketBinaryServer = Buffer | ArrayBuffer | Blob | ArrayBufferView;
@@ -297,7 +297,7 @@ export class RxSocketClientSubject<T> extends Subject<T> {
   /**
    * Returns formatted and filtered message from server for given event with Observable
    *
-   * @param {string | "close"} event represents value inside {utf8Data.event} or {event} from server response
+   * @param {string | 'close'} event represents value inside {utf8Data.event} or {event} from server response
    *
    * @return {Observable<WebSocketMessageServer>}
    *

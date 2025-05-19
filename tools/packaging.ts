@@ -72,10 +72,12 @@ class Packaging {
               console.error('copy failed =>', err.message);
             }
 
+            // @ts-ignore
             observer.next();
             observer.complete();
           });
         } else {
+          // @ts-ignore
           observer.next();
           observer.complete();
         }

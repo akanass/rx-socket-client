@@ -296,6 +296,10 @@ To set up your development environment:
 
 ## Change History
 
+* v2.1.0 (2025-05-19)
+    * Upgrade all packages' versions to move on `rxjs:7.8.2` and delete incompatible packages
+    * Documentation
+    * Note: Integration tests have to be rewritten to be fully compliant - TBD
 * v2.0.0 (2021-09-15)
     * Upgrade all packages' versions to move on `rxjs:7.3.0` and delete incompatible packages
     * Delete browser single version due to incompatibility
